@@ -135,6 +135,8 @@ def count_pass(passfile):
 	with open(passfile, 'r') as f:
 		for line in f:
 			count += 1
+		f.close()
+			
 	return str(count)
 	
 
@@ -146,7 +148,7 @@ def remove_dupes():
 		if line not in lines_seen:
 			outfile.write(line)
 			lines_seen.add(line)
-			outfile.close()
+	outfile.close()
 
 
 
@@ -160,7 +162,7 @@ def attack_restapi(url,attempts,userdata,passfile):
 				for line in f:
 					password = line.strip()
 					cnt = test_login (url,user,password,cnt,attempts)
-
+			f.close()
 
 
 
@@ -181,11 +183,12 @@ def attack_rssfeed(url,attempts,userdata,passfile):
 			user = line.strip()
 			cnt = 1
 			print(("[+] Found User: "+user+" [+]"))
-			with open(passfile, 'r') as f:
-				for line in f:
+			with open(passfile, 'r') as b:
+				for line in b:
 					password = line.strip()
 					cnt = test_login (url,user,password,cnt,attempts)
-		
+			f.close()
+			b.close()
 					
 	
 	
@@ -202,7 +205,7 @@ def attack_sitemap(url,attempts,userdata,passfile):
 				for line in f:
 					password = line.strip()
 					cnt = test_login (url,user,password,cnt,attempts)
-		
+		f.close()
 		
 		
 # Time For Some Machine Learning Quality IF statements.		
