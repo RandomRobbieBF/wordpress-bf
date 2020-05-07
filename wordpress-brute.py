@@ -26,7 +26,7 @@ passfile = args.file
 
 
 
-http_proxy = "http://localhost:8085"
+http_proxy = ""
 proxyDict = { 
               "http"  : http_proxy, 
               "https" : http_proxy, 
