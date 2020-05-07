@@ -12,6 +12,6 @@ It will terminate once a login has been found.
 
 I think on the todo:
 
-* [] ignore a user
-* [] if unable to find a method to get users allow manual.
+* Ignore a user
+* If unable to find a method to get users allow manual.
 
